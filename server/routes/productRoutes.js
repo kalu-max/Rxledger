@@ -26,3 +26,9 @@ router.get('/:id', verifyToken, async (req, res) => {
 });
 
 module.exports = router;
+
+// View all products (for retailers)
+router.get('/', async (req, res) => {
+  const products = await Product.find().populate('wholesalerId', 'email');
+  res.json(products);
+});
