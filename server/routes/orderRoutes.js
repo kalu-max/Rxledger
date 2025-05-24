@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Order = require('../models/Order');
-const Product = require('../models/Product');
+const Product = require('../models/product');
 const verifyToken = require('../auth');
 
 // Place Order (with bulk support and inventory update)
