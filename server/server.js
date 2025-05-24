@@ -8,18 +8,16 @@ const PORT = 3000;
 const JWT_SECRET = "rx-secret"; // For production, use process.env.JWT_SECRET
 
 // Replace with your actual MongoDB URI from Replit secrets or MongoDB Atlas
-const MONGO_URI = "mongodb+srv://Rxledger:<Rxledger>@cluster0.mbn9mg5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"; 
-const client = new MongoClient(MONGO_URI);
-let db;
+require('dotenv').config();
+const mongoose = require('mongoose');
 
 app.use(cors());
 app.use(express.json());
 
 // Connect MongoDB
-client.connect().then(() => {
-  db = client.db("rx-ledger");
-  console.log("✅ MongoDB connected");
-});
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
 // Middleware to verify JWT token
 function authenticateUser(req, res, next) {
