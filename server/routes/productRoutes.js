@@ -1,21 +1,28 @@
+
 const express = require('express');
-const app = express();
-const port = 3000;
-
-// Incorrect path initially
-// const verifyToken = require('../middleware/auth');
-
-// Corrected path
+const router = express.Router();
 const verifyToken = require('../auth');
+const Product = require('../models/product');
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-app.get('/protected', verifyToken, (req, res) => {
-  res.send('Protected route accessed!');
+router.get('/:id', verifyToken, async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+module.exports = router;
